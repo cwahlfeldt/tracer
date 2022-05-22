@@ -28,6 +28,10 @@ export function hex(q, r, s) {
     if (q + r + s !== 0)
         throwError('q + r + s must equal 0')
 
+    if (q === -0) q = 0
+    if (r === -0) r = 0
+    if (s === -0) s = 0
+
     return {q, r, s}
 }
 
@@ -58,29 +62,29 @@ export function subtractHex(hexA, hexB)  {
    )
 }
 
-export function multiplyHex(hex, multiplyBy)  {
+export function multiplyHex(h, multiplyBy)  {
     return hex(
-        hex.q * multiplyBy,
-        hex.r * multiplyBy,
-        hex.s * multiplyBy
+        h.q * multiplyBy,
+        h.r * multiplyBy,
+        h.s * multiplyBy
    )
 }
 
-export function lengthOfHex(hex) {
-    return (abs(hex.q) + abs(hex.r) + abs(hex.s)) / 2
+export function lengthOfHex(h) {
+    return (abs(h.q) + abs(h.r) + abs(h.s)) / 2
 }
 
 export function distanceBetweenHexes(hexA, hexB) {
     return lengthOfHex(subtractHex(hexA, hexB))
 }
 
-export function hexNeighbor(hex, direction) {
-    return addHex(hex, direction)
+export function hexNeighbor(h, direction) {
+    return addHex(h, direction)
 }
 
-export function getAllNeighbors(hex) {
+export function getAllNeighbors(h) {
     return Object.keys(DIRECTIONS).map(key => {
-        return hexNeighbor(hex, DIRECTIONS[key])
+        return hexNeighbor(h, DIRECTIONS[key])
     })
 }
 
@@ -127,9 +131,9 @@ export function getCornerOffset(corner) {
     )
 }
 
-export function hexCorners(hex) {
+export function hexCorners(h) {
     const corners = []
-    const center = convertHexToPixel(hex)
+    const center = convertHexToPixel(h)
     for (let i = 0; i < 6; i++) {
         const offset = getCornerOffset(i)
         corners.push(point(
