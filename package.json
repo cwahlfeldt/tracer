@@ -1,11 +1,13 @@
 {
     "name": "tracer",
     "version": "0.0.1",
+    "type": "module",
     "description": "Tracer game",
     "scripts": {
         "start": "parcel ./src/index.html",
         "build": "parcel build ./src/index.html",
-        "test": "ava test"
+        "test": "ava",
+        "test-watch": "ava --watch"
     },
     "author": "cwahlfeldt",
     "license": "ISC",
