@@ -14,5 +14,8 @@
     "devDependencies": {
         "ava": "^4.2.0",
         "parcel": "^2.5.0"
+    },
+    "dependencies": {
+        "@reduxjs/toolkit": "^1.8.1"
     }
 }
