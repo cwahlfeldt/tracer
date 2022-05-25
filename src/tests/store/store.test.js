@@ -1,8 +1,8 @@
 import test from "ava"
-import {generateBoard, putPlayerOnBoard} from "../../game/board.js"
+import {generateBoard, putPieceOnBoard} from "../../game/board.js"
 import {generatePlayer} from "../../game/pieces.js"
 import {hex} from "../../lib/hex.js"
-import {initializeBoard, gameReducer, initialState, initializePlayer} from "../../store/store.js"
+import {gameReducer, initialState, startGame} from "../../store/store.js"
 
 test('should return initial state', t => {
     t.deepEqual(
@@ -14,10 +14,11 @@ test('should return initial state', t => {
 test('initialize a game board', t => {
     const player = generatePlayer()
     const board = generateBoard(1)
-    const expectedBoard = putPlayerOnBoard(player, board, hex(0, 0, 0))
-    const newState = gameReducer(initialState, initializeBoard({
-        size: 1,
+    const expectedBoard = putPieceOnBoard(player, hex(0, 0, 0), board)
+    const newState = gameReducer(initialState, startGame({
+        boardSize: 1,
         playerLocation: hex(0, 0, 0),
+        numOfEnemies: 1,
     }))
 
     t.deepEqual(
@@ -25,12 +26,3 @@ test('initialize a game board', t => {
         expectedBoard
     )
 })
-
-// test('initialize a player piece on the board', t => {
-//     const board = generateBoard(1)
-//     const player = generatePlayer()
-//     const expectedBoard = putPlayerOnBoard(player, board, hex(0, 0, 0))
-//     const newState = gameReducer(initialState, initializePlayer(hex(0, 0, 0)))
-//
-//     t.deepEqual(newState, expectedBoard)
-// })
