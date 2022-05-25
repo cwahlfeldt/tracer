@@ -16,14 +16,14 @@ test('generate a tile with hexagon', t => {
 test('generate a player piece', t => {
     t.deepEqual(
         generatePlayer(),
-        { health: 3 }
+        { type: 'player', health: 3 }
     )
 })
 
 test('generate enemy piece', t => {
     t.deepEqual(
         generateEnemy(),
-        { health: 1 }
+        { type: 'enemy', health: 1 }
     )
 })
 

@@ -6,6 +6,6 @@ export const generateTile = (h = hex(0, 0, 0), props = {}) => ({
     props,
 })
 
-export const generatePlayer = () => ({ health: 3 })
+export const generatePlayer = () => ({ type: 'player', health: 3 })
 
-export const generateEnemy = () => ({ health: 1 })
+export const generateEnemy = () => ({ type: 'enemy', health: 1 })
