@@ -6,15 +6,21 @@ export const generateBoard = (size) => {
     return grid.map(h => generateTile(h))
 }
 
-export const putPlayerOnBoard = (player, board, hex) => {
+export const putPieceOnBoard = (piece, hex, board) => {
     return board.map(tile => {
-        if ('player' in tile.props) {
+        if (piece.type === 'player' && 'player' in tile.props) {
             delete tile.props.player
         }
 
         if (areHexagonsEqual(tile.hex, hex)) {
-            tile.props.player = player
+            tile.props[`${piece.type}`] = piece
         }
+
         return tile
     })
 }
+
+export const Board = (board = generateBoard(1)) => ({
+    putPiece: (piece, location) => Board(putPieceOnBoard(piece, location, board)),
+    result: () => board,
+})
