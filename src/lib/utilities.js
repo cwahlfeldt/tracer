@@ -1,4 +1,4 @@
-const {round, abs, random} = Math
+const { round, abs, random } = Math
 
 export function roundCubeCoords(qq, rr, ss) {
     let q = round(qq)
@@ -12,20 +12,20 @@ export function roundCubeCoords(qq, rr, ss) {
     if (qDiff > rDiff && qDiff > sDiff) {
         q = -r - s
     } else if (rDiff > sDiff) {
-        r = -q-s
+        r = -q - s
     } else {
-        s = -q-r
+        s = -q - r
     }
 
     if (q === -0) q = 0
     if (r === -0) r = 0
     if (s === -0) s = 0
 
-    return {q, r, s}
+    return { q, r, s }
 }
 
 export function lerp(a, b, t) {
-    return a * (1-t) + b * t
+    return a * (1 - t) + b * t
 }
 
 export function randNum(min, max) {
@@ -44,3 +44,28 @@ export function throwError(msg) {
     console.error(msg)
     throw msg
 }
+
+export function rafInterval(fn, delay, leading) {
+    let start = Date.now();
+    const idWrapper = {};
+    const loop = () => {
+        idWrapper.id = requestAnimationFrame(loop);
+        const delta = Date.now() - start;
+        if (delta >= delay) {
+            fn();
+            start = Date.now();
+        }
+    };
+
+    idWrapper.id = requestAnimationFrame(loop);
+
+    // First time, if leading, call before any delay
+    if (leading) {
+        fn();
+    }
+
+    // idWrapper is an object with mutable id property.
+    return idWrapper;
+}
+
+export const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
