@@ -4,13 +4,13 @@ import {generateBoard, putPieceOnBoard} from "../game/board.js";
 import {generatePlayer} from "../game/pieces.js";
 import {getAllNeighbors, hex} from "../lib/hex.js";
 
-export const initialState = [
+export const initialState = {board: [
     {
         hex: hex(0, 0, 0),
         neighbors: getAllNeighbors(hex(0, 0, 0)),
         props: {player: generatePlayer()},
     }
-]
+]}
 
 const gameSlice = createSlice({
     name: 'game',
@@ -19,7 +19,7 @@ const gameSlice = createSlice({
         startGame: (state, {payload}) => {
             const player = generatePlayer()
             const board = generateBoard(payload.boardSize)
-            return putPieceOnBoard(player, payload.playerLocation, board)
+            state.board = putPieceOnBoard(player, payload.playerLocation, board)
         },
     }
 })
