@@ -3,7 +3,7 @@ import {Board, generateBoard, putPieceOnBoard} from "../../game/board.js";
 import {generateEnemy, generatePlayer, generateTile} from "../../game/pieces.js";
 import {hex} from "../../lib/hex.js";
 
-test('create board with tiles', t => {
+test('create boardPiece with tiles', t => {
         t.deepEqual(
         generateBoard(1),
         [
@@ -18,7 +18,7 @@ test('create board with tiles', t => {
     )
 })
 
-test('place a player piece on the board', t => {
+test('place a playerPiece piece on the boardPiece', t => {
     const board = generateBoard(1)
     const player = generatePlayer()
     t.deepEqual(
@@ -35,7 +35,7 @@ test('place a player piece on the board', t => {
     )
 })
 
-test('ensure there is only one player on the board', t => {
+test('ensure there is only one playerPiece on the boardPiece', t => {
     const board = generateBoard(1)
     const player = generatePlayer()
     const playerBoard = putPieceOnBoard(player, hex(0, 0, 0), board)
@@ -53,7 +53,7 @@ test('ensure there is only one player on the board', t => {
     )
 })
 
-test('place an enemy on the board', t => {
+test('place an enemy on the boardPiece', t => {
     const board = generateBoard(1)
     const enemy = generateEnemy()
     t.deepEqual(
@@ -70,7 +70,7 @@ test('place an enemy on the board', t => {
     )
 })
 
-test('put multiple pieces on the board', t => {
+test('put multiple pieces on the boardPiece', t => {
     const board = generateBoard(1)
     const player = generatePlayer()
     const enemy = generateEnemy()

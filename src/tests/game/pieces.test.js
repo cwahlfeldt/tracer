@@ -13,7 +13,7 @@ test('generate a tile with hexagon', t => {
     )
 })
 
-test('generate a player piece', t => {
+test('generate a playerPiece piece', t => {
     t.deepEqual(
         generatePlayer(),
         { type: 'player', health: 3 }
