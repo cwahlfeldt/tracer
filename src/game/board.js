@@ -1,5 +1,5 @@
-import {areHexagonsEqual, hexShapedGrid} from "../lib/hex.js";
-import {generateTile} from "./pieces.js";
+import { areHexagonsEqual, hexShapedGrid } from "../lib/hex.js"
+import { generateTile } from "./pieces.js"
 
 export const generateBoard = (size) => {
     const grid = hexShapedGrid(size)
