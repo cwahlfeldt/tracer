@@ -46,26 +46,26 @@ export function throwError(msg) {
 }
 
 export function rafInterval(fn, delay, leading) {
-    let start = Date.now();
-    const idWrapper = {};
+    let start = Date.now()
+    const idWrapper = {}
     const loop = () => {
-        idWrapper.id = requestAnimationFrame(loop);
-        const delta = Date.now() - start;
+        idWrapper.id = requestAnimationFrame(loop)
+        const delta = Date.now() - start
         if (delta >= delay) {
-            fn();
-            start = Date.now();
+            fn()
+            start = Date.now()
         }
-    };
+    }
 
-    idWrapper.id = requestAnimationFrame(loop);
+    idWrapper.id = requestAnimationFrame(loop)
 
     // First time, if leading, call before any delay
     if (leading) {
-        fn();
+        fn()
     }
 
     // idWrapper is an object with mutable id property.
-    return idWrapper;
+    return idWrapper
 }
 
-export const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
+export const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x)

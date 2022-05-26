@@ -24,3 +24,9 @@ export const Board = (board = generateBoard(1)) => ({
     putPiece: (piece, location) => Board(putPieceOnBoard(piece, location, board)),
     result: () => board,
 })
+
+export function boardGraph(board) {
+    return board.map((tile) => {
+        return tile.neighbors.map(neighbor => board.findIndex(t => areHexagonsEqual(t.hex, neighbor)))
+    })
+}

@@ -12,7 +12,7 @@ function drawHexagon(ctx, tile) {
     ctx.lineWidth = 2
     ctx.strokeStyle = '#3f3f3f'
     ctx.stroke()
-    ctx.fillStyle = 'rgba(42, 160, 216, 0.5)'
+    ctx.fillStyle = 'rgba(42, 160, 216, 0.7)'
     ctx.fill()
     ctx.closePath()
 }
@@ -36,6 +36,6 @@ function drawHexIndexes(ctx, tile, index) {
 export default function boardPiece(ctx, map) {
     map.forEach((tile, index) => {
         drawHexagon(ctx, tile)
-        drawHexIndexes(ctx, tile, index)
+        // drawHexIndexes(ctx, tile, index)
     })
 }
