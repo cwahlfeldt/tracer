@@ -6,10 +6,10 @@ to defeat all enemies on map
 
 ### rules
 
-1. initialize a hex grid map
+1. ~initialize a hex grid map~
 2. the hex grid map will have random untraversable tiles - IMPLEMENT LATER
 3. the amount of untraversable tiles can be specified and will increase as the game progresses - IMPLEMENT LATER
-4. a player object will spawn on the grid at the start of a game
+4. ~a player object will spawn on the grid at the start of a game~
 5. enemies will spawn on the map
 6. enemies cannot spawn in range of the player
 7. it is the players turn at the start of a game
