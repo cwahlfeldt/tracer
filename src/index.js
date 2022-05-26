@@ -1,3 +1,1 @@
-import render from './game/game.js'
-
-render()
+import './scenes/scene.js'
