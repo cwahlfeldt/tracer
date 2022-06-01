@@ -10,11 +10,12 @@ const root = document.getElementById("game")
 const ctx = root.getContext("2d")
 
 store.dispatch(startGame({
-    boardSize: 3,
+    boardSize: 5,
     playerLocation: hex(0, 0, 0),
 }))
 
 const { board } = store.getState()
+console.log(board)
 const player = selectPlayer(store.getState())
 let {x, y} = player.location
 let anim = null
@@ -29,7 +30,6 @@ function render() {
     x = lerp(x, player.location.x, 0.1)
     y = lerp(y, player.location.y, 0.1)
 
-    boardPiece(ctx, board)
     playerPiece(ctx, {x, y})
 
     anim = requestAnimationFrame(render)

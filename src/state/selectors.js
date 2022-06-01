@@ -1,10 +1,11 @@
 import {createSelector} from "@reduxjs/toolkit";
 import {convertHexToPixel} from "../lib/hex.js";
+import {findPlayer} from "../game/board.js";
 
 export const selectPlayer = createSelector(
     state => state.board,
     board => {
-        const tile = board.filter(tile => 'player' in tile.props)[0]
+        const tile = findPlayer(board)
         return {
             ...tile.props.player,
             location: convertHexToPixel(tile.hex)

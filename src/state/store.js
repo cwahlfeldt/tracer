@@ -1,9 +1,10 @@
 import * as toolkitRaw from '@reduxjs/toolkit';
 const { createSlice, configureStore, current } = toolkitRaw.default ?? toolkitRaw;
-import {boardGraph, generateBoard, putPieceOnBoard} from "../game/board.js";
-import {generatePlayer} from "../game/pieces.js";
+import {boardGraph, findPlayer, genBoard, generateBoard, hexGraph, putPieceOnBoard} from "../game/board.js";
+import {generatePlayer, placePiece} from "../game/pieces.js";
 import {areHexagonsEqual, getAllNeighbors, hex} from "../lib/hex.js";
 import {findPath} from "../lib/pathFinding.js";
+import {objFilter} from "../lib/utilities";
 
 export const initialState = {
     board: [
@@ -12,7 +13,8 @@ export const initialState = {
             neighbors: getAllNeighbors(hex(0, 0, 0)),
             props: {player: generatePlayer()},
         }
-    ]
+    ],
+    graph: {},
 }
 
 const gameSlice = createSlice({
@@ -20,17 +22,23 @@ const gameSlice = createSlice({
     initialState,
     reducers: {
         startGame: (state, {payload}) => {
+            const board = genBoard(payload.boardSize)
             const player = generatePlayer()
-            const board = generateBoard(payload.boardSize)
-            return {board: putPieceOnBoard(player, payload.playerLocation, board)}
+            state = {board: placePiece(player, payload.playerLocation, board)}
+            console.log(state)
         },
         movePlayer: (state, {payload}) => {
             const board = state.board
-            console.log(boardGraph(board))
-            const player = board.filter(tile => 'player' in tile.props)[0].props.player
+            const player = findPlayer(board)
+            // const player = playerTile.props.player
+            // const playerTileIndex = board.findIndex(tile => areHexagonsEqual(tile.hex, playerTile.hex))
+            // const destinationTileIndex = board.findIndex(tile => areHexagonsEqual(tile.hex, payload))
+            // const path = findPath(graph, playerTileIndex, destinationTileIndex)
+            // console.log(path)
+            state.board[JSON.stringify(player.hex)] = {player}
+            console.log(state)
 
-            // const path = findPath(board.findIndex(board.findIndex(t => areHexagonsEqual(t.hex, neighbor))))
-            state.board = putPieceOnBoard(player, payload, board)
+            // state.board = placePiece(player, payload, board)
         }
     }
 })

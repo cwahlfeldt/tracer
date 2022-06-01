@@ -68,4 +68,8 @@ export function rafInterval(fn, delay, leading) {
     return idWrapper
 }
 
-export const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x)
+export function objFilter (obj, predicate) {
+    return Object.keys(obj)
+        .filter( key => predicate(obj[key]) )
+        .reduce( (res, key) => (res[key] = obj[key], res), {} )
+}
