@@ -25,7 +25,7 @@ export const Board = (board = generateBoard(1)) => ({
     result: () => board,
 })
 
-export function boardGraph(board) {
+export function convertBoardToGraph(board) {
     return board.map((tile) => {
         return tile.neighbors.map(neighbor => board.findIndex(t => areHexagonsEqual(t.hex, neighbor)))
     })

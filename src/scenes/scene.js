@@ -2,9 +2,9 @@ import store, {movePlayer, startGame} from "../state/store.js"
 import {getMousePos} from "../lib/canvasUtilities.js"
 import playerPiece from "../pieces/playerPiece.js"
 import boardPiece from "../pieces/boardPiece.js"
-import {areHexagonsEqual, convertPixelToHex, hex, point} from "../lib/hex.js";
-import {selectPlayer} from "../state/selectors.js";
-import {lerp} from "../lib/utilities.js";
+import {convertPixelToHex, hex, point} from "../lib/hex.js"
+import {selectPlayer} from "../state/selectors.js"
+import {lerp} from "../lib/utilities.js"
 
 const root = document.getElementById("game")
 const ctx = root.getContext("2d")
@@ -45,12 +45,11 @@ store.subscribe(() => {
 function cleanup() {
     root.width = window.innerWidth
     root.height = window.innerHeight
-    ctx.clearRect(0, 0, root.width, root.height);
+    ctx.clearRect(0, 0, root.width, root.height)
     ctx.translate(root.width * 0.5, root.height * 0.5)
 }
 
 root.addEventListener('click', event => {
     const { x, y } = getMousePos(ctx, event)
-    console.log(x)
     store.dispatch(movePlayer(convertPixelToHex(point(x, y))))
 })
