@@ -5,17 +5,17 @@
     "description": "Tracer game",
     "scripts": {
         "start": "parcel ./src/index.html",
-        "build": "parcel build ./src/index.html",
+        "build": "parcel build ./src/index.html --public-url ./",
         "test": "ava",
-        "test-watch": "ava --watch"
+        "test-watch": "ava --watch",
+        "deploy": "rm -rf ./dist && npm run build && gh-pages -d ./dist && rm -rf ./dist"
     },
     "author": "cwahlfeldt",
     "license": "ISC",
     "devDependencies": {
+        "@reduxjs/toolkit": "^1.8.1",
         "ava": "^4.2.0",
+        "gh-pages": "^4.0.0",
         "parcel": "^2.5.0"
-    },
-    "dependencies": {
-        "@reduxjs/toolkit": "^1.8.1"
     }
 }
