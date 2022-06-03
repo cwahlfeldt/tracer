@@ -7,6 +7,9 @@ export const generateBoard = (size) => {
 }
 
 export const putPieceOnBoard = (piece, hex, board) => {
+    if (!board.some(t => areHexagonsEqual(t.hex, hex))) {
+        return board
+    }
     return board.map(tile => {
         if (piece.type === 'player' && 'player' in tile.props) {
             delete tile.props.player
