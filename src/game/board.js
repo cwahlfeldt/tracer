@@ -30,3 +30,7 @@ export function convertBoardToGraph(board) {
         return tile.neighbors.map(neighbor => board.findIndex(t => areHexagonsEqual(t.hex, neighbor)))
     })
 }
+
+export function findPlayerTile(board) {
+    return board.filter(tile => 'player' in tile.props)[0]
+}

@@ -13,9 +13,8 @@
     "license": "ISC",
     "devDependencies": {
         "ava": "^4.2.0",
-        "parcel": "^2.5.0"
-    },
-    "dependencies": {
+        "gh-pages": "^4.0.0",
+        "parcel": "^2.5.0",
         "@reduxjs/toolkit": "^1.8.1"
     }
 }
