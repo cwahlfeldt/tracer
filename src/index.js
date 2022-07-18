@@ -1,1 +1,1 @@
-import './scenes/scene.js'
+import './scenes/scene.js';

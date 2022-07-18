@@ -1,4 +1,4 @@
-import { getAllNeighbors, hex } from "../lib/hex.js";
+import { getAllNeighbors, hex } from '../lib/hex.js'
 
 export const generateTile = (h = hex(0, 0, 0), props = {}) => ({
     hex: h,

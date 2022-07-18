@@ -1,10 +1,12 @@
-export function getMousePos(ctx, event) {
-    const canvas = ctx.canvas
+import { CTX } from "./consts"
+
+export function getMousePos(event) {
+    const canvas = CTX.canvas
     const rect = canvas.getBoundingClientRect()
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
-    const transform = ctx.getTransform();
+    const transform = CTX.getTransform();
     const invMat = transform.invertSelf();
 
     return {
@@ -14,19 +16,19 @@ export function getMousePos(ctx, event) {
 }
 
 export function drawCircle(
-    ctx,
+    CTX,
     x = 0,
     y = 0,
     color = 'black',
     radius = 20,
     strokeWidth = 0
 ) {
-    ctx.beginPath()
-    ctx.arc(x, y, radius, 0, 2 * Math.PI, false)
-    ctx.fillStyle = color
-    ctx.fill()
-    ctx.lineWidth = strokeWidth
-    ctx.strokeStyle = color
-    ctx.stroke()
-    ctx.closePath()
+    CTX.beginPath()
+    CTX.arc(x, y, radius, 0, 2 * Math.PI, false)
+    CTX.fillStyle = color
+    CTX.fill()
+    CTX.lineWidth = strokeWidth
+    CTX.strokeStyle = color
+    CTX.stroke()
+    CTX.closePath()
 }
