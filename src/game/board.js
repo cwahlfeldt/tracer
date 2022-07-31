@@ -24,8 +24,18 @@ export const putPieceOnBoard = (piece, hex, board) => {
     })
 }
 
-export const putPiecesOnBoard = (pieces, board) => {
+export const putPiecesOnBoard = (pieces, hexes, board) => {
     let newBoard = board
+
+    hexes.forEach((hex) => {
+        if (pieces.length <= 0) {
+            return newBoard
+        }
+
+        newBoard = putPieceOnBoard(pieces.pop(), hex, newBoard)
+    })
+
+    return newBoard
 }
 
 export function convertBoardToGraph(board) {

@@ -1,14 +1,9 @@
 import * as toolkitRaw from '@reduxjs/toolkit'
-const { createSlice, configureStore, current } =
-    toolkitRaw.default ?? toolkitRaw
-import {
-    convertBoardToGraph,
-    generateBoard,
-    putPieceOnBoard,
-} from '../game/board.js'
+const { createSlice, configureStore } = toolkitRaw.default ?? toolkitRaw
+import { generateBoard, putPieceOnBoard, putPiecesOnBoard } from '../game/board.js'
 import { generateEnemy, generatePlayer } from '../game/pieces.js'
-import { areHexagonsEqual, getAllNeighbors, hex } from '../lib/hex.js'
-import { findPath } from '../lib/pathFinding.js'
+import { getAllNeighbors, hex } from '../lib/hex.js'
+import { findPlayer } from './selectors.js'
 
 export const initialState = {
     board: [
@@ -28,14 +23,16 @@ const gameSlice = createSlice({
             const player = generatePlayer()
             const enemy = generateEnemy()
             const board = generateBoard(payload.boardSize)
-            return {
-                board: putPieceOnBoard(player, payload.playerLocation, board),
-            }
+
+            state.board = putPiecesOnBoard(
+                [player, enemy, enemy],
+                [hex(0,0,0), hex(1, -1, 0), hex(-1, 1, 0)],
+                board
+            )
         },
         movePlayer: (state, { payload }) => {
             const board = state.board
-            const player = board.filter((tile) => 'player' in tile.props)[0]
-                .props.player
+            const player = findPlayer(board).props.player
 
             state.board = putPieceOnBoard(player, payload, board)
         },
