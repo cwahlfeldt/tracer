@@ -1,8 +1,11 @@
-import { areHexagonsEqual, hexShapedGrid } from '../lib/hex.js'
+import { areHexagonsEqual, hex, hexShapedGrid, hexShapedHashGrid } from '../lib/hex.js'
+import { mapHexBoard } from './game.js'
 import { generateTile } from './pieces.js'
 
 export const generateBoard = (size) => {
     const grid = hexShapedGrid(size)
+    const hashGrid = hexShapedHashGrid(2)
+
     return grid.map((h) => generateTile(h))
 }
 

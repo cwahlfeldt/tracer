@@ -1,11 +1,12 @@
-import { CTX } from "../lib/consts.js";
-import {convertHexToPixel, hexCorners} from "../lib/hex.js";
+import { loopHexBoard } from '../game/game.js'
+import { CTX } from '../lib/consts.js'
+import { convertHexToPixel, hexCorners } from '../lib/hex.js'
 
-function drawHexagon(tile) {
-    const corners = hexCorners(tile.hex)
+function drawHexagon(hex) {
+    const corners = hexCorners(hex)
 
     CTX.beginPath()
-    corners.forEach(corner => {
+    corners.forEach((corner) => {
         CTX.lineTo(corner.x, corner.y)
     })
     CTX.lineTo(corners[0].x, corners[0].y)
@@ -22,21 +23,27 @@ function drawHexIndexes(tile, index) {
     const corners = hexCorners(tile.hex)
 
     CTX.beginPath()
-    corners.forEach(corner => {
+    corners.forEach((corner) => {
         CTX.lineTo(corner.x, corner.y)
     })
     CTX.lineTo(corners[0].x, corners[0].y)
 
     CTX.fillStyle = 'black'
-    CTX.font = '16px sans-serif';
+    CTX.font = '16px sans-serif'
     CTX.textAlign = 'center'
-    CTX.fillText(index, convertHexToPixel(tile.hex).x, convertHexToPixel(tile.hex).y);
+    CTX.fillText(
+        index,
+        convertHexToPixel(tile.hex).x,
+        convertHexToPixel(tile.hex).y
+    )
     CTX.closePath()
 }
 
 export default function boardPiece(map) {
-    map.forEach((tile, index) => {
-        drawHexagon(tile)
-        // drawHexIndexes(tile, index)
+    loopHexBoard(map, (hex, index) => {
+        drawHexagon(hex)
     })
+    // map.forEach((tile, index) => {
+    //     // drawHexIndexes(tile, index)
+    // })
 }

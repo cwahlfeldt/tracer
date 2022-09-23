@@ -1,4 +1,4 @@
-import { CTX } from "./consts"
+import { CTX } from './consts'
 
 export function getMousePos(event) {
     const canvas = CTX.canvas
@@ -6,13 +6,13 @@ export function getMousePos(event) {
     const x = event.clientX - rect.left
     const y = event.clientY - rect.top
 
-    const transform = CTX.getTransform();
-    const invMat = transform.invertSelf();
+    const transform = CTX.getTransform()
+    const invMat = transform.invertSelf()
 
     return {
         x: x * invMat.a + y * invMat.c + invMat.e,
-        y: x * invMat.b + y * invMat.d + invMat.f
-    };
+        y: x * invMat.b + y * invMat.d + invMat.f,
+    }
 }
 
 export function drawCircle(

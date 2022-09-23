@@ -21,7 +21,7 @@ store.dispatch(
 
 render((state) => {
     const player = selectPlayer(state)
-    const enemies = selectEnemies(state)
+    // const enemies = selectEnemies(state)
     const playerX = player.location.x
     const playerY = player.location.y
 
@@ -29,9 +29,9 @@ render((state) => {
     y = lerp(y, playerY, 0.1)
 
     boardPiece(state.board)
-    enemies.forEach((enemy, index) => {
-        enemyPiece(point(enemy.location.x, enemy.location.y))
-    })
+    // enemies.forEach((enemy) => {
+    //     enemyPiece(point(enemy.location.x, enemy.location.y))
+    // })
     playerPiece(point(x, y))
 })
 

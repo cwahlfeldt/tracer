@@ -182,3 +182,20 @@ export function hexShapedGrid(radius) {
     }
     return grid
 }
+
+export function hexShapedHashGrid(radius) {
+    let grid = {}
+    for (let q = -radius; q <= radius; q++) {
+        const r1 = Math.max(-radius, -q - radius)
+        const r2 = Math.min(radius, -q + radius)
+        for (let r = r1; r <= r2; r++) {
+            const newHex = hex(q, r, -q - r)
+            const hexString = JSON.stringify(newHex)
+            grid[hexString] = {
+                neighbors: getAllNeighbors(newHex),
+                props: {}
+            }
+        }
+    }
+    return grid
+}
