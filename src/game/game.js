@@ -1,4 +1,5 @@
 import { getAllNeighbors, hexShapedHashGrid } from '../lib/hex.js'
+import { findPlayer } from '../state/selectors.js'
 
 export function dhx(h) {
     return JSON.stringify(h)
@@ -34,6 +35,13 @@ export function loopHexBoard(board, callback) {
 
 export function placePiece(board, piece, hex) {
     let newBoard = board
+    if (piece.type === 'player') {
+        console.log(newBoard)
+        const player = findPlayer(newBoard)
+        if (player) {
+            newBoard[dhx(player.hex)].props = {}
+        }
+    }
     newBoard[dhx(hex)].props[piece.type] = piece
     return newBoard
 }
@@ -42,7 +50,6 @@ const BoardBuilder = (board = hexShapedHashGrid(1)) => ({
     placePiece: (h, piece) =>
         BoardBuilder(() => {
             board[dhx(h)].props[piece.type] = piece
-            console.log(board)
             return board
         }),
 

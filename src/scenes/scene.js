@@ -1,13 +1,15 @@
 import store, { movePlayer, startGame } from '../state/store.js'
-import { convertHexToPixel, convertPixelToHex, hex, point } from '../lib/hex.js'
+import { convertHexToPixel, convertPixelToHex, hex, hexShapedHashGrid, point } from '../lib/hex.js'
 import { getMousePos } from '../lib/canvasUtilities.js'
 import { lerp } from '../lib/utilities.js'
 import { click } from '../lib/events.js'
-import { selectEnemies, selectPlayer } from '../state/selectors.js'
+import { findPlayer, selectEnemies, selectPlayer } from '../state/selectors.js'
 import render from './renderer.js'
 import playerPiece from '../pieces/playerPiece.js'
 import boardPiece from '../pieces/boardPiece.js'
 import enemyPiece from '../pieces/enemyPiece.js'
+import { generatePlayer } from '../game/pieces.js'
+import { placePiece } from '../game/game.js'
 
 const playerStartHex = hex(0, 0, 0)
 let { x, y } = convertHexToPixel(playerStartHex)
@@ -19,6 +21,12 @@ store.dispatch(
     })
 )
 
+// const grid = hexShapedHashGrid(2)
+// const player = generatePlayer()
+// const {board = placePiece(grid, player, hex(0,0,0))
+
+const {board} = store.getState()
+
 render((state) => {
     const player = selectPlayer(state)
     // const enemies = selectEnemies(state)
@@ -28,7 +36,7 @@ render((state) => {
     x = lerp(x, playerX, 0.1)
     y = lerp(y, playerY, 0.1)
 
-    boardPiece(state.board)
+    boardPiece(board)
     // enemies.forEach((enemy) => {
     //     enemyPiece(point(enemy.location.x, enemy.location.y))
     // })

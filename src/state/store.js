@@ -1,17 +1,12 @@
 import * as toolkitRaw from '@reduxjs/toolkit'
+import { putPieceOnBoard } from '../game/board.js'
+import { generateEnemy, generatePlayer } from '../game/pieces.js'
+import { hex, hexShapedHashGrid } from '../lib/hex.js'
+import { findPlayer } from './selectors.js'
+import { placePiece } from '../game/game.js'
+
 const { createSlice, configureStore, current } =
     toolkitRaw.default ?? toolkitRaw
-import {
-    convertBoardToGraph,
-    generateBoard,
-    putPieceOnBoard,
-    putPiecesOnBoard,
-} from '../game/board.js'
-import { generateEnemy, generatePlayer } from '../game/pieces.js'
-import { hexShapedHashGrid, getAllNeighbors, hex } from '../lib/hex.js'
-import { findPath } from '../lib/pathFinding.js'
-import { findPlayer } from './selectors.js'
-import BoardBuilder, { dhx, placePiece } from '../game/game.js'
 
 const startHex = hex(0, 0, 0)
 export const initialState = {
@@ -32,13 +27,11 @@ const gameSlice = createSlice({
         startGame: (state, { payload }) => {
             const player = generatePlayer()
             const enemy = generateEnemy()
-            const boardWithPlayer = placePiece(
-                hexShapedHashGrid(3),
+            state.board = placePiece(
+                hexShapedHashGrid(2),
                 player,
                 hex(0, 0, 0)
             )
-
-            state.board = boardWithPlayer
         },
 
         movePlayer: (state, { payload }) => {
@@ -46,7 +39,8 @@ const gameSlice = createSlice({
             const player = findPlayer(board)
             // const graph = convertBoardToGraph(board)
             // const path = findPath(graph, player.hex, payload)
-            state.board = putPieceOnBoard(player, payload, board)
+            console.log(payload)
+            state.board = placePiece(board, player, payload)
         },
     },
 })
