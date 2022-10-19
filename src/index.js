@@ -1,1 +1,1 @@
-import './scenes/scene.js';
+import './game/scenes/scene.js';

@@ -1,5 +1,5 @@
 import test from 'ava'
-import BoardBuilder from '../../game/game.js'
+import BoardBuilder from '../../game/board.js'
 import {hex} from '../../lib/hex.js'
 import { getAllNeighbors } from '../../lib/hex.js'
 import { generatePlayer } from '../../game/pieces.js'

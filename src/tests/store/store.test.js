@@ -1,8 +1,8 @@
 import test from "ava"
-import {generateBoard, putPieceOnBoard} from "../../game/board.js"
+import {generateBoard, putPieceOnBoard} from "../../game/board.old.js"
 import {generatePlayer, generateTile} from "../../game/pieces.js"
 import {hex} from "../../lib/hex.js"
-import {gameReducer, initialState, movePlayer, startGame} from "../../state/store.js"
+import {gameReducer, initialState, movePlayer, startGame} from "../../game/state/store.js"
 
 test('should return initial state', t => {
     t.deepEqual(

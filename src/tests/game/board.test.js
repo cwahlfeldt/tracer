@@ -3,7 +3,7 @@ import {
     generateBoard,
     putPieceOnBoard,
     putPiecesOnBoard,
-} from '../../game/board.js'
+} from '../../game/board.old.js'
 import {
     generateEnemy,
     generatePlayer,

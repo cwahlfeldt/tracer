@@ -1,50 +1,92 @@
-import { areHexagonsEqual, hex, hexShapedGrid, hexShapedHashGrid } from '../lib/hex.js'
-import { mapHexBoard } from './game.js'
-import { generateTile } from './pieces.js'
+import { convertHexToPixel, hexShapedHashGrid } from '../lib/hex.js'
 
-export const generateBoard = (size) => {
-    const grid = hexShapedGrid(size)
-    const hashGrid = hexShapedHashGrid(2)
-
-    return grid.map((h) => generateTile(h))
+export function dhx(h) {
+    return JSON.stringify(h)
 }
 
-export const putPieceOnBoard = (piece, hex, board) => {
-    if (!board.some((t) => areHexagonsEqual(t.hex, hex))) {
-        return board
-    }
+export function hx(h) {
+    return JSON.parse(h)
+}
 
-    return board.map((tile) => {
-        if (piece.type === 'player' && 'player' in tile.props) {
-            delete tile.props.player
-        }
-
-        if (areHexagonsEqual(tile.hex, hex)) {
-            tile.props[`${piece.type}`] = piece
-        }
-
-        return tile
+export function mapHexBoard(board, callback) {
+    const map = Object.entries(board).map(([h, data]) => {
+        const result = callback(hx(h), data)
+        return [h, result]
     })
+
+    return Object.fromEntries(map)
 }
 
-export const putPiecesOnBoard = (pieces, hexes, board) => {
+export function filterHexBoard(board, callback) {
+    const filtered = Object.entries(board).filter(([h, data]) => {
+        return callback(hx(h), data)
+    })
+
+    return Object.fromEntries(filtered)
+}
+
+export function loopHexBoard(board, callback) {
+    const b = board
+    for (const h in b) {
+        callback(hx(h), b[h])
+    }
+}
+
+export const findPlayer = (board) => {
+    const filteredBoardTiles = filterHexBoard(board, (hex, { props }) => {
+        return 'player' in props
+    })
+    const playerHex = Object.keys(filteredBoardTiles)[0]
+    const playerTile = board[playerHex]
+    if (typeof playerTile === 'undefined') {
+        return false
+    }
+    return {
+        ...playerTile.props.player,
+        hex: hx(playerHex),
+        location: convertHexToPixel(hx(playerHex)),
+    }
+}
+
+export function placePiece(board, piece, hex) {
     let newBoard = board
 
-    hexes.forEach((hex) => {
-        if (pieces.length <= 0) {
-            return newBoard
+    if (piece.type === 'player') {
+        const player = findPlayer(newBoard)
+        if (player) {
+            newBoard[dhx(player.hex)].props = {}
         }
+    }
 
-        newBoard = putPieceOnBoard(pieces.pop(), hex, newBoard)
-    })
-
+    newBoard[dhx(hex)].props[piece.type] = piece
     return newBoard
 }
 
-export function convertBoardToGraph(board) {
-    return board.map((tile) => {
-        return tile.neighbors.map((neighbor) =>
-            board.findIndex((t) => areHexagonsEqual(t.hex, neighbor))
-        )
-    })
-}
+const BoardBuilder = (board = hexShapedHashGrid(1)) => ({
+    placePiece: (h, piece) =>
+        BoardBuilder(() => {
+            board[dhx(h)].props[piece.type] = piece
+            return board
+        }),
+
+    placePieces: (pieces, hexes) =>
+        BoardBuilder((board) => {
+            hexes.forEach((h, i) => {
+                if (pieces <= 0) {
+                    return board
+                }
+
+                board[dhx(h)].props[pieces[i].type] = pieces.pop()
+            })
+
+            return board
+        }),
+
+    map: (callback) => BoardBuilder(mapHexBoard(board, callback)),
+
+    filter: (callback) => BoardBuilder(filterHexBoard(board, callback)),
+
+    build: () => board,
+})
+
+export default BoardBuilder
