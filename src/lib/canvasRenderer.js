@@ -1,25 +1,23 @@
 import { CTX, ROOT } from './consts.js'
-import store from '../game/state/gameState.js'
 
 export default function render(gameLogicHook, animationHook) {
     let anim = null
-
-    store.subscribe(() => {
-        console.log(store.getState())
-    })
 
     draw()
 
     function draw() {
         cleanup()
-        const state = store.getState()
 
-        gameLogicHook(state, anim)
+        const keepAnimating = gameLogicHook(anim)
 
         anim = requestAnimationFrame(draw)
 
         if (typeof animationHook !== 'undefined') {
             animationHook(anim)
+        }
+
+        if (typeof keepAnimating !== 'undefined' && !keepAnimating) {
+            cancelAnimationFrame(anim)
         }
     }
 

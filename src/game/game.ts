@@ -1,27 +1,7 @@
 import { convertHexToPixel, hex, hexShapedHashGrid } from '../lib/hex.js'
 import { dhx, placePiece } from './board.js'
 import { lerp } from '../lib/utilities'
-
-export const PLAYER = 'PLAYER'
-
-interface Hex {
-    q: number
-    r: number
-    s: number
-}
-
-interface Player {
-    health: number
-}
-
-interface Enemy {
-    health: number
-}
-
-interface Tile {
-    neighbors: Hex[]
-    props: Player | Enemy
-}
+import { Hex, Player, Tile } from '../types'
 
 export default class Game {
     public playerHex: Hex
@@ -37,7 +17,7 @@ export default class Game {
         this.player = { health: 3 }
         this.playerHex = hex(0, 0, 0)
         this.board = placePiece(grid, this.player, this.playerHex)
-        this.turn = PLAYER
+        this.turn = 'PLAYER'
 
         const {x, y} = convertHexToPixel(this.playerHex)
         this.playerX = x
@@ -66,7 +46,7 @@ export default class Game {
     }
 
     public movePlayer(hex) {
-        let currentPlayerTileProps = this.getTile(this.playerHex).props
+        const currentPlayerTileProps = this.getTile(this.playerHex).props
         delete currentPlayerTileProps.player
         this.setTile(hex, this.player)
         this.playerHex = hex
