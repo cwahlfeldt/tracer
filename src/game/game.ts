@@ -1,27 +1,22 @@
-import { convertHexToPixel, hex, hexShapedHashGrid } from '../lib/hex.js'
+import { hex, hexShapedHashGrid } from '../lib/hex.js'
 import { dhx, placePiece } from './board.js'
-import { lerp } from '../lib/utilities'
-import { Hex, Player, Tile } from '../types'
+import Player from './player'
+import { Tile, Hex } from '../types'
 
 export default class Game {
-    public playerHex: Hex
     public player: Player
     public board: Tile[]
+    public selectedHex: Hex
     public turn: string
-    private playerX: number
-    private playerY: number
 
     constructor() {
         const grid = hexShapedHashGrid(3)
+        const player = new Player()
 
-        this.player = { health: 3 }
-        this.playerHex = hex(0, 0, 0)
-        this.board = placePiece(grid, this.player, this.playerHex)
+        this.selectedHex = hex(0,0,0)
+        this.player = player
+        this.board = placePiece(grid, this.player.health, this.player.hex)
         this.turn = 'PLAYER'
-
-        const {x, y} = convertHexToPixel(this.playerHex)
-        this.playerX = x
-        this.playerY = y
     }
 
     private getTile(hex) {
@@ -32,23 +27,10 @@ export default class Game {
         this.board[dhx(hex)].props = props
     }
 
-    public getBoard() {
-        return this.board
-    }
-
-    public selectPlayer() {
-        const player = this.player
-        const { x, y } = convertHexToPixel(this.playerHex)
-        const hex = this.playerHex
-        this.playerX = lerp(this.playerX, x, 0.1)
-        this.playerY = lerp(this.playerY, y, 0.1)
-        return { player, hex, x: this.playerX, y: this.playerY }
-    }
-
     public movePlayer(hex) {
-        const currentPlayerTileProps = this.getTile(this.playerHex).props
+        const currentPlayerTileProps = this.getTile(this.player.hex).props
         delete currentPlayerTileProps.player
         this.setTile(hex, this.player)
-        this.playerHex = hex
+        this.player.movePlayer(hex)
     }
 }

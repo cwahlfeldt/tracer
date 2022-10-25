@@ -2,8 +2,6 @@ export function searchPath(graph, start, goal) {
     let predecessorMap = {start}
     let frontier = [start]
 
-    console.log(start, goal)
-
     while (frontier.length !== 0) {
         const current = frontier[0]
         frontier.shift()

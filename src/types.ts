@@ -4,15 +4,13 @@ export interface Hex {
     s: number
 }
 
-export interface Player {
-    health: number
-}
-
-export interface Enemy {
+export interface Character {
+    type: string
     health: number
 }
 
 export interface Tile {
+    hex: Hex
     neighbors: Hex[]
-    props: Player | Enemy
+    props: Character | {}
 }

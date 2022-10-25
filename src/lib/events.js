@@ -5,3 +5,9 @@ export const click = (action) => {
        action(e)
     })
 }
+
+export const hover = (action) => {
+    ROOT.addEventListener('mousemove', (e) => {
+        action(e)
+    })
+}
