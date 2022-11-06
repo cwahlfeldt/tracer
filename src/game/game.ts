@@ -1,36 +1,74 @@
-import { hex, hexShapedHashGrid } from '../lib/hex.js'
-import { dhx, placePiece } from './board.js'
-import Player from './player'
-import { Tile, Hex } from '../types'
+import {
+    findTileWithProp,
+    createPath,
+    putPieceOnBoard,
+    generateBoard,
+} from './board'
+import { convertHexToPixel, hex } from '../lib/hex'
+import { Hex, Character, Board } from '../types'
+import { createSelector } from 'reselect'
+import { randomInt } from '../lib/random'
+import moveCharacter from './character'
 
-export default class Game {
-    public player: Player
-    public board: Tile[]
-    public selectedHex: Hex
-    public turn: string
+export function startGame(
+    boardSize: number = 1,
+    playerStart: Hex = hex(0, 0, 0),
+    enemyStart?: Hex,
+    doShuffle: boolean = false
+) {
+    const board: Board = generateBoard(boardSize, doShuffle)
+    const player: Character = { type: 'player', health: 3 }
+    const enemy: Character = { type: 'enemy', health: 1 }
 
-    constructor() {
-        const grid = hexShapedHashGrid(3)
-        const player = new Player()
+    const enemyBoard = putPieceOnBoard(
+        board,
+        enemy,
+        enemyStart || board[randomInt(0, board.length - 1)].hex
+    )
+    return putPieceOnBoard(enemyBoard, player, playerStart)
+}
 
-        this.selectedHex = hex(0,0,0)
-        this.player = player
-        this.board = placePiece(grid, this.player.health, this.player.hex)
-        this.turn = 'PLAYER'
+export const selectPlayer = createSelector(
+    (board: Board) => board,
+    (board: Board) => {
+        const { hex, props } = findTileWithProp(board, 'player')
+        const { x, y } = convertHexToPixel(hex)
+        const health = props['player'].health
+
+        return { hex, health, x, y }
     }
+)
 
-    private getTile(hex) {
-        return this.board[dhx(hex)]
+export const selectEnemy = createSelector(
+    (board: Board) => board,
+    (board: Board) => {
+        const { hex, props } = findTileWithProp(board, 'enemy')
+        const { x, y } = convertHexToPixel(hex)
+        const health = props['enemy'].health
+
+        return { hex, health, x, y }
     }
+)
 
-    private setTile(hex, props) {
-        this.board[dhx(hex)].props = props
-    }
+export default function Game(board: Board | {} = generateBoard(1)) {
+    return {
+        startGame: (
+            boardSize: number = 1,
+            playerStart: Hex = hex(0, 0, 0),
+            enemyStart?: Hex,
+            doShuffle: boolean = false
+        ) => Game(startGame(boardSize, playerStart, enemyStart, doShuffle)),
 
-    public movePlayer(hex) {
-        const currentPlayerTileProps = this.getTile(this.player.hex).props
-        delete currentPlayerTileProps.player
-        this.setTile(hex, this.player)
-        this.player.movePlayer(hex)
+        moveCharacter: (hex: Hex, characterType: string) =>
+            Game(
+                moveCharacter({
+                    board: board || generateBoard(1),
+                    hex,
+                    characterType,
+                })
+            ),
+
+        result: () => board,
     }
 }
+Game({}).startGame().result()

@@ -1,15 +1,20 @@
 {
     "compilerOptions": {
-        "module": "CommonJS",
-        "target": "es6",
-        "checkJs": false,
-        "allowJs": true
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": ["ESNext", "DOM"],
+        "moduleResolution": "Node",
+        "strict": true,
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": false,
+        "skipLibCheck": true
     },
-    "exclude": [
-        "node_modules"
-    ],
-    "baseUrl": ".",
-    "include": [
-        "src/**/*"
-    ]
+    "include": ["src"]
 }

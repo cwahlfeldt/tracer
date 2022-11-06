@@ -5,12 +5,19 @@ export interface Hex {
 }
 
 export interface Character {
-    type: string
+    type: 'player' | 'enemy'
     health: number
 }
 
+export interface Item {
+    type: string
+}
+
+export type Props = Character & Item
+
 export interface Tile {
     hex: Hex
-    neighbors: Hex[]
-    props: Character | {}
+    props: { [key: string]: Props }
 }
+
+export type Board = readonly Tile[]

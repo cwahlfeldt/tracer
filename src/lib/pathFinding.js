@@ -1,5 +1,5 @@
 export function searchPath(graph, start, goal) {
-    let predecessorMap = {start}
+    let predecessorMap = { start }
     let frontier = [start]
 
     while (frontier.length !== 0) {
@@ -8,7 +8,7 @@ export function searchPath(graph, start, goal) {
 
         if (current === goal) break
 
-        graph[current].forEach(next => {
+        graph[current].forEach((next) => {
             if (!(next in predecessorMap)) {
                 frontier.push(next)
                 predecessorMap[next] = current

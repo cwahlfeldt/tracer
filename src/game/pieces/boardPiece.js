@@ -1,4 +1,3 @@
-import { loopHexBoard } from '../board.js'
 import { CTX } from '../../lib/consts.js'
 import { convertHexToPixel, hexCorners } from '../../lib/hex.js'
 
@@ -19,8 +18,8 @@ function drawHexagon(hex) {
     CTX.closePath()
 }
 
-function drawHexIndexes(tile, index) {
-    const corners = hexCorners(tile.hex)
+function drawHexIndexes(hex, index) {
+    const corners = hexCorners(hex)
 
     CTX.beginPath()
     corners.forEach((corner) => {
@@ -29,20 +28,19 @@ function drawHexIndexes(tile, index) {
     CTX.lineTo(corners[0].x, corners[0].y)
 
     CTX.fillStyle = 'black'
-    CTX.font = '16px sans-serif'
+    CTX.font = '12px sans-serif'
     CTX.textAlign = 'center'
     CTX.fillText(
-        index,
-        convertHexToPixel(tile.hex).x,
-        convertHexToPixel(tile.hex).y
+        `${hex.q}, ${hex.r}, ${hex.s}`,
+        convertHexToPixel(hex).x,
+        convertHexToPixel(hex).y
     )
     CTX.closePath()
 }
 
 export default function boardPiece(map) {
-    // loopHexBoard(map, (hex, index) => {
-    // })
-    map.forEach(({hex}) => {
+    map.forEach(({hex}, index) => {
         drawHexagon(hex)
+        drawHexIndexes(hex, index)
     })
 }

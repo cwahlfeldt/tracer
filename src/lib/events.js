@@ -1,8 +1,9 @@
 import {ROOT} from './consts.js'
+import { getMousePos } from './canvasUtilities.js'
 
 export const click = (action) => {
     ROOT.addEventListener('click', (e) => {
-       action(e)
+       action(getMousePos(e))
     })
 }
 
