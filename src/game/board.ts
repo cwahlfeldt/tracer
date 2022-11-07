@@ -7,7 +7,7 @@ import {
 import { Board, Hex, Props, Tile } from '../types'
 import { findPath } from '../lib/pathFinding'
 
-export function generateBoard(size: number, doShuffle: boolean = false) {
+export function generateBoard(size: number, doShuffle: boolean = false): Board {
     const grid = doShuffle
         ? shuffleGrid(hexShapedGrid(size))
         : hexShapedGrid(size)

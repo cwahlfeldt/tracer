@@ -1,18 +1,21 @@
 import { CTX, ROOT } from './consts.js'
 import store from '../game/store.ts'
 
-export default function render(gameLogicHook) {
-
+export default function render(gameLogicHook, animationHook) {
+    let anim
     draw()
-
-    store.subscribe(() => {
-        draw()
-    })
+    //
+    // store.subscribe(() => {
+    //     draw()
+    // })
 
     function draw() {
         cleanup()
-        gameLogicHook(store.getState())
-        // anim = requestAnimationFrame(draw)
+        gameLogicHook()
+        anim = requestAnimationFrame(draw)
+        if (animationHook) {
+            animationHook(anim)
+        }
     }
 
     function cleanup() {

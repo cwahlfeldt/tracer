@@ -20,4 +20,4 @@ export interface Tile {
     props: { [key: string]: Props }
 }
 
-export type Board = readonly Tile[]
+export type Board = readonly Tile[] | readonly []

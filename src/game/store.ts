@@ -2,8 +2,7 @@ import { createStore } from '../lib/store'
 import { generateBoard } from './board'
 import { startGame } from './game'
 import character from './character'
-import clone from '../lib/clone'
-import { Tile } from '../types'
+import { Board } from '../types'
 
 export const actions = {
     startGame: { type: 'startGame' },
@@ -11,7 +10,7 @@ export const actions = {
 }
 
 function reducer(
-    state: Tile[] = generateBoard(1),
+    state: Board = generateBoard(1),
     action: { type: string },
     payload: any
 ) {
