@@ -3,26 +3,11 @@ import { click } from '../../lib/events.js'
 import render from '../../lib/canvasRenderer.js'
 import playerPiece from '../pieces/playerPiece.js'
 import boardPiece from '../pieces/boardPiece.js'
-import store, { actions } from '../store'
-import Game, {
-    _selectEnemy,
-    _selectPlayer,
-    selectEnemy,
-    selectPlayer,
-} from '../game'
+import Game, { selectEnemy, selectPlayer } from '../game'
 import { lerp } from '../../lib/utilities'
 import enemyPiece from '../pieces/enemyPiece'
-import { Tile } from '../../types'
 
-// store.dispatch(actions.startGame, {
-//     boardSize: 4,
-//     playerStart: hex(0, 0, 0),
-// })
-
-const game = Game([])
-    .createBoard(4)
-    .spawnPlayer(hex(0, 0, 0))
-    .spawnEnemy(hex(0, 1, -1))
+const game = Game([]).createBoard(4).spawnPlayer(hex(0, 0, 0)).spawnEnemy()
 
 const staticBoard = game.result()
 
@@ -33,8 +18,8 @@ let enemyY = 0
 
 const gameLogic = () => {
     const board = game.result()
-    const player = _selectPlayer(board)
-    const enemy = _selectEnemy(board)
+    const player = selectPlayer(board)
+    const enemy = selectEnemy(board)
 
     x = lerp(x, player.x, 0.1)
     y = lerp(y, player.y, 0.1)
@@ -49,8 +34,7 @@ render(gameLogic)
 
 click((action: { x: number; y: number }) => {
     const hex = convertPixelToHex(point(action.x, action.y))
-    game.moveCharacter(hex, 'player').moveCharacter(hex, 'enemy')
+    game.moveCharacter(hex, 'player')
+    setTimeout(() => game.moveCharacter(hex, 'enemy'), 300)
     render(gameLogic, (anim: any) => cancelAnimationFrame(anim))
-    // store.dispatch(actions.moveCharacter, { hex, type: 'player' })
-    // store.dispatch(actions.moveCharacter, { hex, type: 'enemy' })
 })

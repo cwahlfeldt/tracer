@@ -1,6 +1,6 @@
 import { createStore } from '../lib/store'
 import { generateBoard } from './board'
-import { startGame } from './game'
+// import { startGame } from './game'
 import character from './character'
 import { Board } from '../types'
 
@@ -15,8 +15,8 @@ function reducer(
     payload: any
 ) {
     switch (action.type) {
-        case 'startGame':
-            return startGame(payload.boardSize, payload.playerStart)
+        // case 'startGame':
+        // return startGame(payload.boardSize, payload.playerStart)
         case 'moveCharacter':
             return character({
                 board: state,

@@ -6,6 +6,8 @@ import {
 } from '../lib/hex.js'
 import { Board, Hex, Props, Tile } from '../types'
 import { findPath } from '../lib/pathFinding'
+import clone from '../lib/clone.js'
+import { randomInt } from '../lib/random.js'
 
 export function generateBoard(size: number, doShuffle: boolean = false): Board {
     const grid = doShuffle
@@ -18,18 +20,23 @@ export function generateBoard(size: number, doShuffle: boolean = false): Board {
     }))
 }
 
-export function putPieceOnBoard(board: Board, piece: Props, hex: Hex) {
+export function putPieceOnBoard(board: Board, piece: Props, hex?: Hex): Board {
     if (!board.some((t) => areHexagonsEqual(t.hex, hex))) {
         return board
     }
 
+    if (!hex) {
+        let copy = board
+        copy[randomInt(0, board.length - 1)].props[piece.type] = piece
+        console.log(copy)
+        return copy
+    }
+
     return board.map((tile) => {
-        if (piece.type === 'player' && 'player' in tile.props) {
-            delete tile.props['player']
-        }
+        delete tile.props[piece.type]
 
         if (areHexagonsEqual(tile.hex, hex)) {
-            tile.props[`${piece.type}`] = piece
+            tile.props[piece.type] = piece
         }
 
         return tile
