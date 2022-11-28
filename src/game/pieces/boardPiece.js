@@ -39,8 +39,8 @@ function drawHexIndexes(hex, index) {
 }
 
 export default function boardPiece(map) {
-    map.forEach(({hex}, index) => {
+    map.forEach(({ hex }, index) => {
         drawHexagon(hex)
-        drawHexIndexes(hex, index)
+        // drawHexIndexes(hex, index)
     })
 }

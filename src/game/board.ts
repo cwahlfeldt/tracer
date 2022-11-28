@@ -6,7 +6,6 @@ import {
 } from '../lib/hex.js'
 import { Board, Hex, Props, Tile } from '../types'
 import { findPath } from '../lib/pathFinding'
-import clone from '../lib/clone.js'
 import { randomInt } from '../lib/random.js'
 
 export function generateBoard(size: number, doShuffle: boolean = false): Board {
@@ -26,10 +25,7 @@ export function putPieceOnBoard(board: Board, piece: Props, hex?: Hex): Board {
     }
 
     if (!hex) {
-        let copy = board
-        copy[randomInt(0, board.length - 1)].props[piece.type] = piece
-        console.log(copy)
-        return copy
+        board[randomInt(0, board.length - 1)].props[piece.type] = piece
     }
 
     return board.map((tile) => {
@@ -47,9 +43,7 @@ export function putPiecesOnBoard(pieces: any, hexes: Hex[], board: Board) {
     let newBoard = board
 
     hexes.forEach((hex) => {
-        if (pieces.length <= 0) {
-            return newBoard
-        }
+        if (pieces.length <= 0) return newBoard
 
         newBoard = putPieceOnBoard(newBoard, pieces.pop(), hex)
     })
@@ -64,6 +58,9 @@ export function findIndexOfTile(board: Board, hex: Hex) {
 export function createPath(board: Board, startHex: Hex, endHex: Hex) {
     const startIndex = findIndexOfTile(board, startHex)
     const endIndex = findIndexOfTile(board, endHex)
+
+    if (startIndex === -1 || endIndex === -1) return [startHex]
+
     const graph = convertBoardToGraph(board)
     const path = findPath(graph, startIndex, endIndex)
 

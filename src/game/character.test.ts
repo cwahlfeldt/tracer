@@ -1,6 +1,6 @@
 import { describe, it, assert } from 'vitest'
 import { Board } from '../types'
-import Game, { selectEnemy, selectPlayer } from './game'
+import { GameBuilder, selectEnemy, selectPlayer } from './game'
 import { hex } from '../lib/hex'
 import moveCharacter from './character'
 import { findPath } from '../lib/pathFinding'
@@ -25,7 +25,7 @@ export const moveCharacterBoard: Board = [
     },
     {
         hex: { q: 0, r: 1, s: -1 },
-        props: { enemy: { type: 'enemy', health: 1 } },
+        props: { enemyOne: { type: 'enemyOne', health: 1 } },
     },
     {
         hex: { q: 1, r: -1, s: 0 },
@@ -39,12 +39,12 @@ export const moveCharacterBoard: Board = [
 
 describe('Character interactions', () => {
     it('should be able to move a character', () => {
-        const board = Game([])
+        const board = GameBuilder([])
             .createBoard(1)
             .spawnPlayer(hex(0, 0, 0))
-            .spawnEnemy(hex(0, 1, -1))
+            .spawnEnemy('enemyOne', hex(0, 1, -1))
             .moveCharacter(hex(0, -1, 1), 'player')
-            .result()
+            .build()
 
         assert.deepEqual(board, moveCharacterBoard)
     })
@@ -65,7 +65,7 @@ describe('Character interactions', () => {
             },
             {
                 hex: { q: 0, r: 0, s: 0 },
-                props: { enemy: { type: 'enemy', health: 1 } },
+                props: { enemyOne: { type: 'enemyOne', health: 1 } },
                 // ^^ initial player location
             },
             {
@@ -81,29 +81,16 @@ describe('Character interactions', () => {
                 props: {},
             },
         ]
+
         const moveTo = hex(0, -1, 1)
-        const board = Game([])
+        const board = GameBuilder([])
             .createBoard(1)
             .spawnPlayer(hex(0, 0, 0))
-            // console.log(board.result())
-            .spawnEnemy(hex(0, 1, -1))
-            // console.log(board.result())
+            .spawnEnemy('enemyOne', hex(0, 1, -1))
             .moveCharacter(moveTo, 'player')
-            // console.log(board.result())
-            .moveCharacter(moveTo, 'enemy')
-            .result()
-        // console.log(board.result())
+            .moveCharacter(moveTo, 'enemyOne')
+            .build()
 
-        console.log(board) // console.log(createPath(board, hex(0, 1, -1), hex(0, -1, 1))[0])
-        // console.log(createPath(board, hex(0, 0, 0), hex(0, -1, 1))[0])
-        // console.log(
-        //     moveCharacter({ board, hex: moveTo, characterType: 'enemy' })
-        // )
-        // console.log(selectEnemy(board.result()))
-
-        // console.log(board.result())
-        // console.log(selectPlayer(board))
-        // console.log(selectEnemy(board))
         assert.deepEqual(board, expectedBoard)
     })
 })

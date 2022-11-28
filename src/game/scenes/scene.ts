@@ -3,38 +3,35 @@ import { click } from '../../lib/events.js'
 import render from '../../lib/canvasRenderer.js'
 import playerPiece from '../pieces/playerPiece.js'
 import boardPiece from '../pieces/boardPiece.js'
-import Game, { selectEnemy, selectPlayer } from '../game'
-import { lerp } from '../../lib/utilities'
+import { GameBuilder, selectEnemy, selectPlayer } from '../game'
 import enemyPiece from '../pieces/enemyPiece'
 
-const game = Game([]).createBoard(4).spawnPlayer(hex(0, 0, 0)).spawnEnemy()
+const Game = GameBuilder([]).createBoard(6).spawnPlayer(hex(0, 0, 0))
+const enemyTypes = ['enemyOne', 'enemyTwo', 'enemyThree', 'enemyFour']
 
-const staticBoard = game.result()
+enemyTypes.forEach((type) => Game.spawnEnemy(type))
 
-let x = 0
-let y = 0
-let enemyX = 0
-let enemyY = 0
+const staticBoard = Game.build()
 
 const gameLogic = () => {
-    const board = game.result()
+    const board = Game.build()
     const player = selectPlayer(board)
-    const enemy = selectEnemy(board)
 
-    x = lerp(x, player.x, 0.1)
-    y = lerp(y, player.y, 0.1)
-    playerPiece({ x: x, y: y })
-
-    enemyX = lerp(enemyX, enemy.x, 0.1)
-    enemyY = lerp(enemyY, enemy.y, 0.1)
-    enemyPiece({ x: enemyX, y: enemyY })
     boardPiece(staticBoard)
+
+    enemyTypes.forEach((type) => {
+        const { x, y } = selectEnemy(board, type)
+        enemyPiece({ x, y })
+    })
+
+    playerPiece({ x: player.x, y: player.y })
 }
+
 render(gameLogic)
 
 click((action: { x: number; y: number }) => {
     const hex = convertPixelToHex(point(action.x, action.y))
-    game.moveCharacter(hex, 'player')
-    setTimeout(() => game.moveCharacter(hex, 'enemy'), 300)
-    render(gameLogic, (anim: any) => cancelAnimationFrame(anim))
+    Game.moveCharacter(hex, 'player')
+    enemyTypes.forEach((type) => Game.moveCharacter(hex, type))
+    render(gameLogic, (a: any) => cancelAnimationFrame(a))
 })

@@ -1,4 +1,6 @@
-export const blankBoard = [
+import { Board } from '../types'
+
+export const blankBoard: Board = [
     {
         hex: { q: -1, r: 0, s: 1 },
         props: {},
@@ -29,7 +31,7 @@ export const blankBoard = [
     },
 ]
 
-export const gameBoard = [
+export const gameBoard: Board = [
     {
         hex: { q: -1, r: 0, s: 1 },
         props: {},
@@ -41,7 +43,7 @@ export const gameBoard = [
     {
         hex: { q: 0, r: -1, s: 1 },
         props: {
-            enemy: { type: 'enemy', health: 1 },
+            enemyOne: { type: 'enemyOne', health: 1 },
         },
     },
     {

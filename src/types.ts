@@ -5,7 +5,7 @@ export interface Hex {
 }
 
 export interface Character {
-    type: 'player' | 'enemy'
+    type: 'player' | 'enemy' | string
     health: number
 }
 
