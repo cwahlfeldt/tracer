@@ -4,7 +4,7 @@ import {
     hexShapedGrid,
     shuffleGrid,
 } from '../lib/hex.js'
-import { Board, Hex, Props, Tile } from '../types'
+import { Board, Hex, Piece, Props, Tile } from '../types'
 import { findPath } from '../lib/pathFinding'
 import { randomInt } from '../lib/random.js'
 
@@ -19,36 +19,34 @@ export function generateBoard(size: number, doShuffle: boolean = false): Board {
     }))
 }
 
-export function putPieceOnBoard(board: Board, piece: Props, hex?: Hex): Board {
+export function getPieceKey(piece: Piece) {
+    return Object.keys(piece)[0]
+}
+
+export function putPieceOnBoard(board: Board, piece: Piece, hex?: Hex): Board {
     if (!board.some((t) => areHexagonsEqual(t.hex, hex))) {
         return board
     }
 
+    const pieceKey = getPieceKey(piece)
+    const props = board.find(t => areHexagonsEqual(t.hex, hex))?.props
+
+    if (props && Object.keys(props).find(key => props[key].type === piece[pieceKey].type))
+        return board
+
     if (!hex) {
-        board[randomInt(0, board.length - 1)].props[piece.type] = piece
+        board[randomInt(0, board.length - 1)].props[pieceKey] = piece[pieceKey]
     }
 
     return board.map((tile) => {
-        delete tile.props[piece.type]
+        delete tile.props[pieceKey]
 
         if (areHexagonsEqual(tile.hex, hex)) {
-            tile.props[piece.type] = piece
+            tile.props[pieceKey] = piece[pieceKey]
         }
 
         return tile
     })
-}
-
-export function putPiecesOnBoard(pieces: any, hexes: Hex[], board: Board) {
-    let newBoard = board
-
-    hexes.forEach((hex) => {
-        if (pieces.length <= 0) return newBoard
-
-        newBoard = putPieceOnBoard(newBoard, pieces.pop(), hex)
-    })
-
-    return newBoard
 }
 
 export function findIndexOfTile(board: Board, hex: Hex) {
@@ -71,7 +69,7 @@ export function convertBoardToGraph(board: Board) {
     return board.map((tile) => {
         return getAllNeighbors(tile.hex)
             .map((neighbor) =>
-                board.findIndex((t) => areHexagonsEqual(t.hex, neighbor))
+                board.findIndex((t) => areHexagonsEqual(t.hex, neighbor)),
             )
             .filter((index) => index !== -1)
     })
@@ -79,7 +77,7 @@ export function convertBoardToGraph(board: Board) {
 
 export function findTileWithProp(
     board: Board,
-    propType: string = 'player'
+    propType: string = 'player',
 ): Tile {
     return board.find((tile) => propType in tile.props)!
 }

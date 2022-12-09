@@ -43,7 +43,7 @@ export const gameBoard: Board = [
     {
         hex: { q: 0, r: -1, s: 1 },
         props: {
-            enemyOne: { type: 'enemyOne', health: 1 },
+            enemyOne: { type: 'enemy', health: 1 },
         },
     },
     {

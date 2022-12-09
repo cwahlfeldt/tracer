@@ -15,9 +15,11 @@ export interface Item {
 
 export type Props = Character & Item
 
+export type Piece = { [key: string]: Props }
+
 export interface Tile {
     hex: Hex
-    props: { [key: string]: Props }
+    props: Piece
 }
 
 export type Board = readonly Tile[] | readonly []
