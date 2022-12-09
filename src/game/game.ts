@@ -1,9 +1,8 @@
 import { findTileWithProp, putPieceOnBoard, generateBoard } from './board'
 import { convertHexToPixel } from '../lib/hex'
-import { Hex, Character, Board } from '../types'
+import { Hex, Board } from '../types'
 import { randomInt } from '../lib/random'
 import moveCharacter from './character'
-import memoize from 'fast-memoize'
 
 export const selectPlayer = (board: Board) => {
     const { hex, props } = findTileWithProp(board, 'player')
@@ -21,8 +20,10 @@ export const selectEnemy = (board: Board, type: string = 'enemyOne') => {
     return { hex, health, x, y }
 }
 
-const player: Character = { type: 'player', health: 3 }
-const enemy = (type: string = 'enemyOne'): Character => ({ type, health: 1 })
+const player: Piece = { player: { type: 'player', health: 3 } }
+const enemy = (key: string = 'enemyOne'): Piece => ({
+    [key]: { type: 'enemy', health: 1 },
+})
 
 export function GameBuilder(board: Board = generateBoard(1)) {
     return {

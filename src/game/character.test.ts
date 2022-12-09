@@ -1,10 +1,7 @@
 import { describe, it, assert } from 'vitest'
 import { Board } from '../types'
-import { GameBuilder, selectEnemy, selectPlayer } from './game'
+import { GameBuilder } from './game'
 import { hex } from '../lib/hex'
-import moveCharacter from './character'
-import { findPath } from '../lib/pathFinding'
-import { createPath } from './board'
 
 export const moveCharacterBoard: Board = [
     {
