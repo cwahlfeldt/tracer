@@ -1,12 +1,14 @@
 import {
     areHexagonsEqual,
     getAllNeighbors,
+    hex,
     hexShapedGrid,
     shuffleGrid,
 } from '../lib/hex.js'
 import { Board, Hex, Piece, Props, Tile } from '../types'
 import { findPath } from '../lib/pathFinding'
 import { randomInt } from '../lib/random.js'
+import clone from '../lib/clone'
 
 export function generateBoard(size: number, doShuffle: boolean = false): Board {
     const grid = doShuffle
@@ -29,16 +31,22 @@ export function putPieceOnBoard(board: Board, piece: Piece, hex?: Hex): Board {
     }
 
     const pieceKey = getPieceKey(piece)
-    const props = board.find(t => areHexagonsEqual(t.hex, hex))?.props
+    const props = board.find((t) => areHexagonsEqual(t.hex, hex))?.props
 
-    if (props && Object.keys(props).find(key => props[key].type === piece[pieceKey].type))
+    if (
+        props &&
+        Object.keys(props).find(
+            (key) => props[key].type === piece[pieceKey].type
+        )
+    ) {
         return board
+    }
 
     if (!hex) {
         board[randomInt(0, board.length - 1)].props[pieceKey] = piece[pieceKey]
     }
 
-    return board.map((tile) => {
+    const newBoard = board.map((tile) => {
         delete tile.props[pieceKey]
 
         if (areHexagonsEqual(tile.hex, hex)) {
@@ -47,6 +55,8 @@ export function putPieceOnBoard(board: Board, piece: Piece, hex?: Hex): Board {
 
         return tile
     })
+
+    return newBoard
 }
 
 export function findIndexOfTile(board: Board, hex: Hex) {
@@ -69,7 +79,7 @@ export function convertBoardToGraph(board: Board) {
     return board.map((tile) => {
         return getAllNeighbors(tile.hex)
             .map((neighbor) =>
-                board.findIndex((t) => areHexagonsEqual(t.hex, neighbor)),
+                board.findIndex((t) => areHexagonsEqual(t.hex, neighbor))
             )
             .filter((index) => index !== -1)
     })
@@ -77,7 +87,7 @@ export function convertBoardToGraph(board: Board) {
 
 export function findTileWithProp(
     board: Board,
-    propType: string = 'player',
+    propType: string = 'player'
 ): Tile {
     return board.find((tile) => propType in tile.props)!
 }

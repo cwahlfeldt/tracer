@@ -1,11 +1,13 @@
 import { describe, it, assert } from 'vitest'
 import { blankBoard } from '../data/testBoardData'
+import clone from '../lib/clone'
 import { hex } from '../lib/hex'
-import { Board, Character, Hex, Piece } from '../types'
+import { Board, Character, Hex, Piece, Tile } from '../types'
 import {
     convertBoardToGraph,
     createPath,
     findIndexOfTile,
+    findTileWithProp,
     generateBoard,
     putPieceOnBoard,
 } from './board'
@@ -56,7 +58,7 @@ describe('Board creation', () => {
 
         assert.deepEqual(
             putPieceOnBoard(initializedBoard, playerPiece, hex(0, 0, 0)),
-            expectedBoard,
+            expectedBoard
         )
     })
 
@@ -101,13 +103,13 @@ describe('Board creation', () => {
         const boardWithPlayer = putPieceOnBoard(
             initializedBoard,
             playerPiece,
-            hex(0, 0, 0),
+            hex(0, 0, 0)
         )
 
         const boardWithPlayerAndEnemy = putPieceOnBoard(
             boardWithPlayer,
             enemyPiece,
-            hex(-1, 1, 0),
+            hex(-1, 1, 0)
         )
 
         assert.deepEqual(boardWithPlayerAndEnemy, expectedBoard)
@@ -158,19 +160,19 @@ describe('Board creation', () => {
         const boardWithPlayer = putPieceOnBoard(
             initializedBoard,
             playerPiece,
-            hex(0, 0, 0),
+            hex(0, 0, 0)
         )
 
         const boardWithPlayerAndEnemy = putPieceOnBoard(
             boardWithPlayer,
             enemyPiece,
-            hex(-1, 1, 0),
+            hex(-1, 1, 0)
         )
 
         const boardWithPlayerAndTwoEnemies = putPieceOnBoard(
             boardWithPlayerAndEnemy,
             enemyTwoPiece,
-            hex(-1, 0, 1),
+            hex(-1, 0, 1)
         )
 
         assert.deepEqual(boardWithPlayerAndTwoEnemies, expectedBoard)
@@ -178,7 +180,7 @@ describe('Board creation', () => {
         const tryToMovePieceOnBoard = putPieceOnBoard(
             boardWithPlayerAndTwoEnemies,
             enemyPiece,
-            hex(-1, 0, 1),
+            hex(-1, 0, 1)
         )
 
         assert.deepEqual(tryToMovePieceOnBoard, expectedBoard)
@@ -223,7 +225,7 @@ describe('Board creation', () => {
 
         assert.deepEqual(
             createPath(mediumBoard, hex(0, 0, 0), outOfBoundsHex),
-            [hex(0, 0, 0)],
+            [hex(0, 0, 0)]
         )
     })
 
@@ -241,5 +243,17 @@ describe('Board creation', () => {
         ]
 
         assert.deepEqual(graph, expectedGraph)
+    })
+
+    it('can find a tile with a given prop', () => {
+        const initBoard: Board = generateBoard(1)
+        const board = putPieceOnBoard(initBoard, playerPiece, hex(0, 0, 0))
+        const expectedTile: Tile = {
+            hex: hex(0, 0, 0),
+            props: { player: { type: 'player', health: 3 } },
+        }
+
+        assert.deepEqual(findTileWithProp(board, 'player'), expectedTile)
+        assert.equal(findTileWithProp(initBoard, 'enemyOne'), undefined)
     })
 })

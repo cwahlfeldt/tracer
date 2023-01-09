@@ -22,7 +22,7 @@ export const moveCharacterBoard: Board = [
     },
     {
         hex: { q: 0, r: 1, s: -1 },
-        props: { enemyOne: { type: 'enemyOne', health: 1 } },
+        props: { enemyOne: { type: 'enemy', health: 1 } },
     },
     {
         hex: { q: 1, r: -1, s: 0 },
@@ -62,7 +62,7 @@ describe('Character interactions', () => {
             },
             {
                 hex: { q: 0, r: 0, s: 0 },
-                props: { enemyOne: { type: 'enemyOne', health: 1 } },
+                props: { enemyOne: { type: 'enemy', health: 1 } },
                 // ^^ initial player location
             },
             {

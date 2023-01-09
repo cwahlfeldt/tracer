@@ -3,6 +3,7 @@ import { convertHexToPixel } from '../lib/hex'
 import { Hex, Board, Piece } from '../types'
 import { randomInt } from '../lib/random'
 import moveCharacter from './character'
+import clone from '../lib/clone'
 
 export const selectPlayer = (board: Board) => {
     const { hex, props } = findTileWithProp(board, 'player')
@@ -25,13 +26,21 @@ const enemy = (key: string = 'enemyOne'): Piece => ({
     [key]: { type: 'enemy', health: 1 },
 })
 
-export function GameBuilder(board: Board = generateBoard(1)) {
+export function GameBuilder(b: Board) {
+    const board = clone(b)
+
     return {
         createBoard: (size: number = 1, shuffle: boolean = false) =>
             GameBuilder(generateBoard(size, shuffle)),
 
-        spawnPlayer: (hex: Hex) =>
-            GameBuilder(putPieceOnBoard(board, player, hex)),
+        spawnPlayer: (hex?: Hex) =>
+            GameBuilder(
+                putPieceOnBoard(
+                    board,
+                    player,
+                    hex || board[randomInt(0, board.length - 1)].hex
+                )
+            ),
 
         spawnEnemy: (type: string = 'enemyOne', hex?: Hex) =>
             GameBuilder(
@@ -45,7 +54,7 @@ export function GameBuilder(board: Board = generateBoard(1)) {
         moveCharacter: (hex: Hex, characterType: string) =>
             GameBuilder(
                 moveCharacter({
-                    board: board,
+                    board,
                     hex,
                     characterType,
                 })
