@@ -3,40 +3,45 @@ import { click } from '../../lib/events.js'
 import render from '../../lib/canvasRenderer.js'
 import playerPiece from '../pieces/playerPiece.js'
 import boardPiece from '../pieces/boardPiece.js'
-import { GameBuilder, selectEnemy, selectPlayer } from '../game'
+import { selectEnemy, selectPlayer, _selectPlayer, _selectEnemy } from '../game'
 import enemyPiece from '../pieces/enemyPiece'
-
-const Game = GameBuilder([]).createBoard(6, true)
+import store, { actions } from '../store'
+import { Board } from '../../types'
+//
+// const Game = GameBuilder([]).createBoard(6, true)
 const enemyTypes = ['enemyOne', 'enemyTwo', 'enemyThree', 'enemyFour']
+store.dispatch(actions.startGame)
+//
+// enemyTypes.forEach((type) => Game.spawnEnemy(type))
+// Game.spawnPlayer()
 
-enemyTypes.forEach((type) => Game.spawnEnemy(type))
-Game.spawnPlayer()
+const staticBoard = store.getState()
+console.log(staticBoard)
 
-const staticBoard = Game.build()
+render((board: Board) => {
+    const player = _selectPlayer(board)
 
-const gameLogic = () => {
-    const board = Game.build()
-    const player = selectPlayer(board)
-
-    boardPiece(staticBoard)
+    boardPiece(board)
 
     playerPiece({ x: player.x, y: player.y })
 
     enemyTypes.forEach((type) => {
-        const { x, y } = selectEnemy(board, type)
+        const { x, y } = _selectEnemy(board, type)
         enemyPiece({ x, y })
     })
-}
-
-render(gameLogic)
+})
 
 click((action: { x: number; y: number }) => {
+    const board = store.getState()
     const hex = convertPixelToHex(point(action.x, action.y))
-    const board = Game.build()
-    const player = selectPlayer(board)
+    // const player = _selectPlayer(board)
 
-    Game.moveCharacter(hex, 'player')
-    enemyTypes.forEach((type) => Game.moveCharacter(player.hex, type))
+    store.dispatch(actions.moveCharacter, { hex, type: 'player' })
 
-    render(gameLogic, (a: any) => cancelAnimationFrame(a))
+    enemyTypes.forEach((type, i) => {
+        store.dispatch(actions.moveCharacter, {
+            hex,
+            type,
+        })
+    })
 })

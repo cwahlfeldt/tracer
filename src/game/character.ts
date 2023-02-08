@@ -38,7 +38,7 @@ export default function moveCharacter({
                 (key: any) => t.props[key].type === 'enemy'
             )
         )
-        console.log(enemyTile)
+
         if (enemyTile !== undefined) {
             currentTurnsBoard = nextBoard.map((tile: Tile) => {
                 if (areHexagonsEqual(tile.hex, enemyTile.hex)) tile.props = {}

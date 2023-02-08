@@ -1,7 +1,7 @@
 import { describe, it, assert } from 'vitest'
 import { Board } from '../types'
-import { GameBuilder } from './game'
 import { hex } from '../lib/hex'
+import { GameBuilder } from './builder'
 
 export const moveCharacterBoard: Board = [
     {

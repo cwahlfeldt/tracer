@@ -1,8 +1,8 @@
 import { describe, it, assert } from 'vitest'
-import { GameBuilder } from './game'
 import { hex } from '../lib/hex'
 import { Board } from '../types.js'
 import { gameBoard } from '../data/testBoardData.js'
+import { GameBuilder } from './builder'
 
 describe('Game rules', async () => {
     it('should initialize a game board', () => {

@@ -1,8 +1,8 @@
 import { createStore } from '../lib/store'
 import { generateBoard } from './board'
-// import { startGame } from './game'
-import character from './character'
 import { Board } from '../types'
+import clone from '../lib/clone'
+import { startGame, moveCharacter } from './game'
 
 export const actions = {
     startGame: { type: 'startGame' },
@@ -10,19 +10,17 @@ export const actions = {
 }
 
 function reducer(
-    state: Board = generateBoard(1),
+    s: Board = generateBoard(1),
     action: { type: string },
     payload: any
 ) {
+    const state = clone(s)
+
     switch (action.type) {
-        // case 'startGame':
-        // return startGame(payload.boardSize, payload.playerStart)
+        case 'startGame':
+            return startGame()
         case 'moveCharacter':
-            return character({
-                board: state,
-                hex: payload.hex,
-                characterType: payload.type,
-            })
+            return moveCharacter(state, payload.hex, payload.type)
         default:
             return state
     }
